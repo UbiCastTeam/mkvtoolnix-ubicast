@@ -1,0 +1,46 @@
+Source: mkvtoolnix
+Section: video
+Priority: optional
+Maintainer: Moritz Bunkus <moritz@bunkus.org>
+Homepage: http://www.bunkus.org/videotools/mkvtoolnix/
+Standards-Version: 3.9.5
+Build-Depends:
+ debhelper (>= 7.0.50~), libwxgtk3.0-dev | libwxgtk2.8-dev,
+ ruby (>= 1.9) | ruby1.9 | ruby1.9.1 | ruby1.9.3,
+ libbz2-dev, liblzo2-dev, zlib1g-dev, libmagic-dev,
+ libflac-dev, libogg-dev, libvorbis-dev,
+ libcurl4-gnutls-dev | libcurl4-openssl-dev,
+ libboost-dev (>= 1.46), libboost-filesystem-dev (>= 1.46),
+ libboost-regex-dev (>= 1.46), libboost-date-time-dev (>= 1.46),
+ libboost-system-dev (>= 1.46),
+ pkg-config
+
+Package: mkvtoolnix
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Suggests: mkvtoolnix-gui
+Description: Set of command-line tools to work with Matroska files
+ Matroska is a new multimedia container format, based on EBML (Extensible
+ Binary Meta Language), which is a kind of binary XML.
+ These tools allow one to manipulate Matroska files.
+  * mkvmerge is a tool to create Matroska files from other formats
+  * mkvinfo allows one to get information about the tracks in a Matroska file
+  * mkvextract can extract tracks from Matroska files to other formats
+  * mkvpropedit can edit header and chapter information without remuxing
+ .
+ This package only provides command-line tools. For graphical tools, you
+ should install the mkvtoolnix-gui package.
+
+Package: mkvtoolnix-gui
+Architecture: any
+Depends: mkvtoolnix (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Replaces: mkvtoolnix (<= 4.6.0-1)
+Description: Set of tools to work with Matroska files - GUI frontend
+ Matroska is a new multimedia container format, based on EBML (Extensible
+ Binary Meta Language), which is a kind of binary XML.
+ .
+ The mmg tool is a graphical user interface for the mkvmerge program, which
+ allows one to create Matroska files from other formats.
+ .
+ This package also contains a graphical version of the mkvinfo tool, which
+ allows one to get information about a Matroska file.

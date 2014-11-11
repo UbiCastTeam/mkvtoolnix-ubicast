@@ -1,0 +1,826 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
+[
+<!ENTITY product "mkvextract">
+<!ENTITY version "7.3.0">
+<!ENTITY date "2014-10-22">
+
+<!ENTITY mkvmerge "<citerefentry><refentrytitle>mkvmerge</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvinfo "<citerefentry><refentrytitle>mkvinfo</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvextract "<citerefentry><refentrytitle>mkvextract</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvpropedit "<citerefentry><refentrytitle>mkvpropedit</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mmg "<citerefentry><refentrytitle>mmg</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+
+<!ENTITY matroska "<productname>Matroska</productname>">
+<!ENTITY oggvorbis "<productname>OggVorbis</productname>">
+<!ENTITY xml "<abbrev>XML</abbrev>">
+
+]>
+
+<refentry lang="en" id="mkvextract">
+ <refentryinfo>
+  <productname>&product;</productname>
+  <date>&date;</date>
+  <authorgroup>
+   <author>
+    <contrib>Developer</contrib>
+    <firstname>Moritz</firstname>
+    <surname>Bunkus</surname>
+    <email>moritz@bunkus.org</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&product;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="version">&version;</refmiscinfo>
+  <refmiscinfo class="date">&date;</refmiscinfo>
+  <refmiscinfo class="source">MKVToolNix</refmiscinfo>
+  <refmiscinfo class="manual">User Commands</refmiscinfo>
+ </refmeta>
+
+ <refnamediv>
+  <refname>&product;</refname>
+  <refpurpose>extract tracks from &matroska; files into other files</refpurpose>
+ </refnamediv>
+
+ <refsynopsisdiv id="mkvextract.synopsis">
+  <title>Synopsis</title>
+  <cmdsynopsis>
+   <command>mkvextract</command>
+   <arg choice="req">mode</arg>
+   <arg choice="req">source-filename</arg>
+   <arg>options</arg>
+   <arg>extraction-spec</arg>
+  </cmdsynopsis>
+ </refsynopsisdiv>
+
+ <refsect1 id="mkvextract.description">
+  <title>Description</title>
+  <para>
+   This program extracts specific parts from a &matroska; file to other useful formats. The first argument, <option>mode</option>, tells
+   &mkvextract; what to extract. Currently supported is the extraction of <link linkend="mkvextract.description.tracks">tracks</link>, <link
+   linkend="mkvextract.description.tags">tags</link>, <link linkend="mkvextract.description.attachments">attachments</link>, <link
+   linkend="mkvextract.description.chapters">chapters</link>, <link linkend="mkvextract.description.cuesheets">CUE sheets</link> and <link
+   linkend="mkvextract.description.timecodes_v2">timecodes</link>.  The second argument is the name of the source file. It must be a
+   &matroska; file. All following arguments are options and extraction specifications; both of which depend on the selected mode.
+  </para>
+
+  <refsect2 id="mkvextract.description.common">
+   <title>Common options</title>
+
+   <para>
+    The following options are available in all modes and only described once in this section.
+   </para>
+
+   <variablelist>
+    <varlistentry id="mkvextract.description.parse_fully">
+     <term><option>-f</option>, <option>--parse-fully</option></term>
+     <listitem>
+      <para>
+       Sets the parse mode to 'full'. The default mode does not parse the whole file but uses the meta seek elements for locating the
+       required elements of a source file. In 99% of all cases this is enough. But for files that do not contain meta seek elements or which
+       are damaged the user might have to use this mode. A full scan of a file can take a couple of minutes while a fast scan only takes
+       seconds.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvextract.description.common.command_line_charset">
+     <term><option>--command-line-charset</option> <parameter>character-set</parameter></term>
+     <listitem>
+      <para>
+       Sets the character set to convert strings given on the command line from. It defaults to the character set given by system's current
+       locale.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvextract.description.common.output_charset">
+     <term><option>--output-charset</option> <parameter>character-set</parameter></term>
+     <listitem>
+      <para>
+       Sets the character set to which strings are converted that are to be output.  It defaults to the character set given by system's
+       current locale.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvextract.description.common.redirect_output">
+     <term><option>-r</option>, <option>--redirect-output</option> <parameter>file-name</parameter></term>
+     <listitem>
+      <para>
+       Writes all messages to the file <parameter>file-name</parameter> instead of to the console.  While this can be done easily with
+       output redirection there are cases in which this option is needed: when the terminal reinterprets the output before writing it to a
+       file.  The character set set with <link
+       linkend="mkvextract.description.common.output_charset"><option>--output-charset</option></link> is honored.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvextract.description.common.ui_language">
+     <term><option>--ui-language</option> <parameter>code</parameter></term>
+     <listitem>
+      <para>
+       Forces the translations for the language <parameter>code</parameter> to be used (e.g.  '<literal>de_DE</literal>' for the German
+       translations). It is preferable to use the environment variables <varname>LANG</varname>, <varname>LC_MESSAGES</varname> and
+       <varname>LC_ALL</varname> though. Entering '<literal>list</literal>' as the <parameter>code</parameter> will cause &mkvextract; to
+       output a list of available translations.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvextract.description.debug">
+     <term><option>--debug</option> <parameter>topic</parameter></term>
+     <listitem>
+      <para>
+       Turn on debugging for a specific feature. This option is only useful for developers.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvextract.description.engage">
+     <term><option>--engage</option> <parameter>feature</parameter></term>
+     <listitem>
+      <para>
+       Turn on experimental features. A list of available features can be requested with <command>mkvextract --engage list</command>. These
+       features are not meant to be used in normal situations.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvextract.description.gui_mode">
+     <term><option>--gui-mode</option></term>
+     <listitem>
+      <para>
+       Turns on GUI mode. In this mode specially-formatted lines may be output that can tell a controlling GUI what's happening. These
+       messages follow the format '<literal>#GUI#message</literal>'. The message may be followed by key/value pairs as in
+       '<literal>#GUI#message#key1=value1#key2=value2…</literal>'. Neither the messages nor the keys are ever translated and always output
+       in English.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-v</option>, <option>--verbose</option></term>
+     <listitem>
+      <para>
+       Be verbose and show all the important &matroska; elements as they're read.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-h</option>, <option>--help</option></term>
+     <listitem>
+      <para>
+       Show usage information and exit.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-V</option>, <option>--version</option></term>
+     <listitem>
+      <para>
+       Show version information and exit.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--check-for-updates</option></term>
+     <listitem>
+      <para>
+       Checks online for new releases by downloading the URL <ulink
+       url="http://mkvtoolnix-releases.bunkus.org/latest-release.xml">http://mkvtoolnix-releases.bunkus.org/latest-release.xml</ulink>. Four
+       lines will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key
+       <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's
+       version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>).
+      </para>
+
+      <para>
+       Afterwards the program exists with an exit code of 0 if no newer release is available, with 1 if a newer release is available and with
+       2 if an error occured (e.g. if the update information could not be retrieved).
+      </para>
+
+      <para>
+       This option is only available if the program was built with support for libcurl.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>@</option><parameter>options-file</parameter></term>
+     <listitem>
+      <para>
+       Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace
+       character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line
+       will be stripped. Each line must contain exactly one option.
+      </para>
+
+      <para>
+       Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link
+       linkend="mkvextract.escaping">the section about escaping text</link>.
+      </para>
+
+      <para>
+       The command line '<command>mkvextract tracks source.mkv --raw 1:destination.raw</command>' could be converted into the following
+       option file:
+      </para>
+
+      <programlisting># Extract a track from source.mkv
+tracks
+source.mkv
+# Output the track as raw data.
+--raw
+1:destination.raw</programlisting>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+
+  <refsect2 id="mkvextract.description.tracks">
+   <title>Track extraction mode</title>
+
+   <para>
+    Syntax: <command>mkvextract <option>tracks</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional></command>
+   </para>
+
+   <para>
+    The following command line options are available for each track in the '<literal>tracks</literal>' extraction mode.  They have to appear
+    in front of the track specification (see below) they should be applied to.
+   </para>
+
+   <variablelist>
+    <varlistentry>
+     <term><option>-c</option> <parameter>character-set</parameter></term>
+     <listitem>
+      <para>
+       Sets the character set to convert the next text subtitle track to. Only valid if the
+       next track ID targets a text subtitle track. It defaults to UTF-8.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--blockadd</option> <parameter>level</parameter></term>
+     <listitem>
+      <para>
+       Keep only the BlockAdditions up to this level.  The default is to keep all levels.  This option only affects certain kinds of codecs
+       like WAVPACK4.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--cuesheet</option></term>
+     <listitem>
+      <para>
+       Causes &mkvextract; to extract a <abbrev>CUE</abbrev> sheet from the chapter information and tag data for the following track into a
+       file whose name is the track's output name with '<literal>.cue</literal>' appended to it.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--raw</option></term>
+     <listitem>
+      <para>
+       Extracts the raw data into a file without any container data around it.  Unlike the <link
+       linkend="mkvextract.description.tracks.fullraw"><option>--fullraw</option></link> flag this flag does not cause the contents of the
+       <classname>CodecPrivate</classname> element to be written to the file.  This mode works with all <classname>CodecIDs</classname>, even
+       the ones that &mkvextract; doesn't support otherwise, but the resulting files might not be usable.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvextract.description.tracks.fullraw">
+     <term><option>--fullraw</option></term>
+     <listitem>
+      <para>
+       Extracts the raw data into a file without any container data around it.  The contents of the <classname>CodecPrivate</classname>
+       element will be written to the file first if the track contains such a header element.  This mode works with all
+       <classname>CodecIDs</classname>, even the ones that &mkvextract; doesn't support otherwise, but the resulting files might not be
+       usable.
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><parameter>TID:outname</parameter></term>
+     <listitem>
+      <para>
+       Causes extraction of the track with the ID <parameter>TID</parameter> into the file
+       <parameter>outname</parameter> if such a track exists in the source file. This option can be
+       given multiple times. The track IDs are the same as the ones output by
+       &mkvmerge;'s <option>--identify</option> option.
+      </para>
+
+      <para>
+       Each output name should be used only once. The exception are RealAudio and RealVideo tracks. If you use the same name for different
+       tracks then those tracks will be saved in the same file. Example:
+      </para>
+
+      <screen>$ mkvextract tracks input.mkv 1:output-two-tracks.rm 2:output-two-tracks.rm</screen>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+
+  <refsect2 id="mkvextract.description.tags">
+   <title>Tags extraction mode</title>
+
+   <para>
+    Syntax: <command>mkvextract <option>tags</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional></command>
+   </para>
+
+   <para>
+    The extracted tags are written to the console unless the output is redirected (see the section about <link
+    linkend="mkvextract.output_redirection">output redirection</link> for details).
+   </para>
+  </refsect2>
+
+  <refsect2 id="mkvextract.description.attachments">
+   <title>Attachments extraction mode</title>
+
+   <para>
+    Syntax: <command>mkvextract <option>attachments</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>AID1:outname1</parameter> <optional><parameter>AID2:outname2</parameter> ...</optional></command>
+   </para>
+
+   <variablelist>
+    <varlistentry>
+     <term><parameter>AID</parameter>:<parameter>outname</parameter></term>
+     <listitem>
+      <para>
+       Causes extraction of the attachment with the ID <parameter>AID</parameter> into the file <parameter>outname</parameter> if such an
+       attachment exists in the source file.  If the <parameter>outname</parameter> is left empty then the name of the attachment inside the
+       source &matroska; file is used instead.  This option can be given multiple times.  The attachment IDs are the same as the ones output
+       by &mkvmerge;'s <option>--identify</option> option.
+     </para>
+    </listitem>
+   </varlistentry>
+   </variablelist>
+  </refsect2>
+
+  <refsect2 id="mkvextract.description.chapters">
+   <title>Chapters extraction mode</title>
+
+   <para>
+    Syntax: <command>mkvextract <option>chapters</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional></command>
+   </para>
+
+   <variablelist>
+    <varlistentry>
+     <term><option>-s</option>, <option>--simple</option></term>
+     <listitem>
+      <para>
+       Exports the chapter information in the simple format used in the <abbrev>OGM</abbrev> tools
+       (CHAPTER01=..., CHAPTER01NAME=...). In this mode some information has to be
+       discarded. Default is to output the chapters in &xml; format.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+
+   <para>
+    The extracted chapters are written to the console unless the output is redirected (see the section about <link
+    linkend="mkvextract.output_redirection">output redirection</link> for details).
+   </para>
+  </refsect2>
+
+  <refsect2 id="mkvextract.description.cuesheets">
+   <title>Cue sheet extraction mode</title>
+
+   <para>
+    Syntax: <command>mkvextract <option>cuesheet</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional></command>
+   </para>
+
+   <para>
+    The extracted cue sheet is written to the console unless the output is redirected (see the section about <link
+    linkend="mkvextract.output_redirection">output redirection</link> for details).
+   </para>
+  </refsect2>
+
+  <refsect2 id="mkvextract.description.timecodes_v2">
+   <title>Timecode extraction mode</title>
+
+   <para>
+    Syntax: <command>mkvextract <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional></command>
+   </para>
+
+   <para>
+    The extracted timecodes are written to the console unless the output is redirected (see the section about <link
+    linkend="mkvextract.output_redirection">output redirection</link> for details).
+   </para>
+
+   <variablelist>
+    <varlistentry>
+     <term><parameter>TID:outname</parameter></term>
+     <listitem>
+      <para>
+       Causes extraction of the timecodes for the track with the ID <parameter>TID</parameter> into the file <parameter>outname</parameter>
+       if such a track exists in the source file. This option can be given multiple times. The track IDs are the same as the ones output by
+       &mkvmerge;'s <option>--identify</option> option.
+      </para>
+
+      <para>
+       Example:
+      </para>
+
+      <screen>$ mkvextract timecodes_v2 input.mkv 1:tc-track1.txt 2:tc-track2.txt</screen>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+ </refsect1>
+
+ <refsect1 id="mkvextract.output_redirection">
+  <title>Output redirection</title>
+
+  <para>
+   Several extraction modes cause &mkvextract; to write the extracted data to the console. There are generally two ways of writing this data
+   into a file: one provided by the shell and one provided by &mkvextract; itself.
+  </para>
+
+  <para>
+   The shell's builtin redirection mechanism is used by appending '<literal>&gt; output-filename.ext</literal>' to the command
+   line. Example:
+  </para>
+
+  <screen>$ mkvextract tags source.mkv &gt; tags.xml</screen>
+
+  <para>
+   &mkvextract;'s own redirection is invoked with the <link
+   linkend="mkvextract.description.common.redirect_output"><option>--redirect-output</option></link> option. Example:
+   </para>
+
+  <screen>$ mkvextract tags source.mkv --redirect-output tags.xml</screen>
+
+  <note>
+   <para>
+    On Windows you should probably use the <link
+    linkend="mkvextract.description.common.redirect_output"><option>--redirect-output</option></link> option because
+    <command>cmd.exe</command> sometimes interpretes special characters before they're written into the output file resulting in broken
+    output.
+   </para>
+  </note>
+ </refsect1>
+
+ <refsect1 id="mkvextract.text_files_and_charsets">
+  <title>Text files and character set conversions</title>
+
+  <para>
+   For an in-depth discussion about how all tools in the MKVToolNix suite handle character set conversions, input/output encoding, command
+   line encoding and console encoding please see the identically-named section in the &mkvmerge; man page.
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvextract.output_file_formats">
+  <title>Output file formats</title>
+
+  <para>
+   The decision about the output format is based on the track type, not on the extension used for the output file name. The following track
+   types are supported at the moment:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>V_MPEG4/ISO/AVC</term>
+    <listitem>
+     <para>
+      <abbrev>H.264</abbrev> / <abbrev>AVC</abbrev> video tracks are written to <abbrev>H.264</abbrev> elementary streams which can be
+      processed further with e.g. <productname>MP4Box</productname> from the <productname>GPAC</productname> package.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>V_MS/VFW/FOURCC</term>
+    <listitem>
+     <para>
+      Fixed <abbrev>FPS</abbrev> video tracks with this <classname>CodecID</classname> are written to <abbrev>AVI</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>V_REAL/*</term>
+    <listitem>
+     <para>
+      <productname>RealVideo</productname> tracks are written to <productname>RealMedia</productname> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>V_THEORA</term>
+    <listitem>
+     <para>
+      <productname>Theora</productname> streams will be written within an <productname>Ogg</productname> container
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>V_VP8, V_VP9</term>
+    <listitem>
+     <para>
+      <abbrev>VP8</abbrev> / <abbrev>VP9</abbrev> tracks are written to <abbrev>IVF</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_MPEG/L2</term>
+    <listitem>
+     <para>
+      MPEG-1 Audio Layer II streams will be extracted to raw <abbrev>MP2</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_MPEG/L3, A_AC3</term>
+    <listitem>
+     <para>
+      These will be extracted to raw <abbrev>MP3</abbrev> and <abbrev>AC3</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_PCM/INT/LIT</term>
+    <listitem>
+     <para>
+      Raw <abbrev>PCM</abbrev> data will be written to a <abbrev>WAV</abbrev> file.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_AAC/MPEG2/*, A_AAC/MPEG4/*, A_AAC</term>
+    <listitem>
+     <para>
+      All <abbrev>AAC</abbrev> files will be written into an <abbrev>AAC</abbrev> file with <abbrev>ADTS</abbrev> headers before each
+      packet. The <abbrev>ADTS</abbrev> headers will not contain the deprecated emphasis field.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_VORBIS</term>
+    <listitem>
+     <para>
+      Vorbis audio will be written into an &oggvorbis; file.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_REAL/*</term>
+    <listitem>
+     <para>
+      <productname>RealAudio</productname> tracks are written to <productname>RealMedia</productname> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_TTA1</term>
+    <listitem>
+     <para>
+      <productname>TrueAudio</productname> tracks are written to <abbrev>TTA</abbrev> files. Please note that due to &matroska;'s limited
+      timecode precision the extracted file's header will be different regarding two fields: <varname>data_length</varname> (the total
+      number of samples in the file) and the <abbrev>CRC</abbrev>.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_ALAC</term>
+    <listitem>
+     <para>
+      <abbrev>ALAC</abbrev> tracks are written to <abbrev>CAF</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_FLAC</term>
+    <listitem>
+     <para>
+      <abbrev>FLAC</abbrev> tracks are written to raw <abbrev>FLAC</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_WAVPACK4</term>
+    <listitem>
+     <para>
+      <productname>WavPack</productname> tracks are written to <abbrev>WV</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_OPUS</term>
+    <listitem>
+     <para>
+      <productname>Opus</productname> tracks are written to <productname>OggOpus</productname> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_TEXT/UTF8</term>
+    <listitem>
+     <para>
+      Simple text subtitles will be written as <abbrev>SRT</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_TEXT/SSA, S_TEXT/ASS</term>
+    <listitem>
+     <para>
+      <abbrev>SSA</abbrev> and <abbrev>ASS</abbrev> text subtitles will be written as <abbrev>SSA</abbrev>/<abbrev>ASS</abbrev> files
+      respectively.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_KATE</term>
+    <listitem>
+     <para>
+      <productname>Kate</productname> streams will be written within an <productname>Ogg</productname> container.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_VOBSUB</term>
+    <listitem>
+     <para>
+      <productname>VobSub</productname> subtitles will be written as <abbrev>SUB</abbrev> files along with the
+      respective index files, as <abbrev>IDX</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_TEXT/USF</term>
+    <listitem>
+     <para>
+      <abbrev>USF</abbrev> text subtitles will be written as <abbrev>USF</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_HDMV/PGS</term>
+    <listitem>
+     <para>
+      <abbrev>PGS</abbrev> subtitles will be written as <abbrev>SUP</abbrev> files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>Tags</term>
+    <listitem>
+     <para>
+      Tags are converted to a &xml; format. This format is the same that &mkvmerge; supports for reading tags.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>Attachments</term>
+    <listitem>
+     <para>
+      Attachments are written to they output file as they are. No conversion whatsoever is done.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>Chapters</term>
+    <listitem>
+     <para>
+      Chapters are converted to a &xml; format. This format is the same that &mkvmerge; supports for reading chapters. Alternatively a
+      stripped-down version can be output in the simple <abbrev>OGM</abbrev> style format.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>Timecodes</term>
+    <listitem>
+     <para>
+      Timecodes are first sorted and then output as a timecode v2 format compliant file ready to be fed to &mkvmerge;.  The extraction to
+      other formats (v1, v3 and v4) is not supported.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+
+ <refsect1>
+  <title>Exit codes</title>
+
+  <para>
+   &mkvextract; exits with one of three exit codes:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     <constant>0</constant> -- This exit codes means that extraction has completed successfully.
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <constant>1</constant> -- In this case &mkvextract; has output at least one warning, but extraction did continue.  A warning is
+     prefixed with the text '<literal>Warning:</literal>'.  Depending on the issues involved the resulting files might be ok or not.  The
+     user is urged to check both the warning and the resulting files.
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <constant>2</constant> -- This exit code is used after an error occurred.  &mkvextract; aborts right after outputting the error message.
+     Error messages range from wrong command line arguments over read/write errors to broken files.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </refsect1>
+
+ <refsect1 id="mkvextract.escaping">
+  <title>Escaping special chars in text</title>
+  <para>
+   There are a few places in which special characters in text must or should be escaped. The rules for escaping are simple: each character
+   that needs escaping is replaced with a backslash followed by another character.
+  </para>
+
+  <para>
+   The rules are: ' ' (a space) becomes '\s', '&quot;' (double quotes) becomes '\2', ':' becomes '\c', '#' becomes '\h' and '\' (a single backslash) itself becomes '\\'.
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvextract.environment_variables">
+  <title>Environment variables</title>
+
+  <para>
+   &mkvextract; uses the default variables that determine the system's locale (e.g. <varname>LANG</varname> and the <varname>LC_*</varname>
+   family). Additional variables:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_DEBUG</varname> and its short form <varname>MTX_DEBUG</varname></term>
+    <listitem>
+     <para>The content is treated as if it had been passed via the <link
+     linkend="mkvextract.description.debug"><option>--debug</option></link> option.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_ENGAGE</varname> and its short form <varname>MTX_ENGAGE</varname></term>
+    <listitem>
+     <para>The content is treated as if it had been passed via the <link
+     linkend="mkvextract.description.engage"><option>--engage</option></link> option.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><varname>MKVTOOLNIX_OPTIONS</varname> and its short form <varname>MTX_OPTIONS</varname></term>
+    <listitem>
+     <para>The content is split on white space. The resulting partial strings are treated as if it had been passed as command line
+     options. If you need to pass special characters (e.g. spaces) then you have to escape them (see <link
+     linkend="mkvextract.escaping">the section about escaping special characters in text</link>).</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+
+ <refsect1 id="mkvextract.seealso">
+  <title>See also</title>
+  <para>
+   &mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvextract.www">
+  <title>WWW</title>
+  <para>
+   The latest version can always be found at <ulink url="http://www.bunkus.org/videotools/mkvtoolnix/">the MKVToolNix homepage</ulink>.
+  </para>
+ </refsect1>
+
+</refentry>

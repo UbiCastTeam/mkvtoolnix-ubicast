@@ -1,0 +1,6 @@
+src/mmg/mmg-gui				usr/bin
+src/mkvinfo-gui				usr/bin
+usr/share/applications/mkvmergeGUI.desktop
+usr/share/applications/mkvinfo.desktop
+usr/share/doc/mkvtoolnix-gui
+usr/share/icons/hicolor/*/apps/mkvmergeGUI.png

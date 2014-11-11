@@ -1,0 +1,137 @@
+# What are we dealing with?
+PACKAGE = mkvtoolnix
+VERSION = 7.3.0
+
+shell = /bin/bash
+
+# Where to?
+srcdir = .
+top_srcdir = .
+
+prefix = /usr/local
+exec_prefix = ${prefix}
+
+bindir = ${exec_prefix}/bin
+sbindir = ${exec_prefix}/sbin
+libexecdir = ${exec_prefix}/libexec
+datarootdir = ${prefix}/share
+datadir = ${datarootdir}
+docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
+sysconfdir = ${prefix}/etc
+sharedstatedir = ${prefix}/com
+localstatedir = ${prefix}/var
+libdir = ${exec_prefix}/lib
+infodir = ${datarootdir}/info
+mandir = ${datarootdir}/man
+man1dir = $(mandir)/man1
+includedir = ${prefix}/include
+oldincludedir = /usr/include
+pkgdatadir = $(datadir)/mkvtoolnix
+pkglibdir = $(libdir)/mkvtoolnix
+pkgincludedir = $(includedir)/mkvtoolnix
+top_builddir = .
+mkinstalldirs = $(shell) $(top_srcdir)/mkinstalldirs
+localedir = $(datadir)/locale
+desktopdir = $(datadir)/applications
+mimepackagesdir = $(datadir)/mime/packages
+icondir = $(datadir)/icons/hicolor
+
+# Common programs
+AR = ar
+CC = gcc
+CPP = gcc -E
+CXX = g++
+EBROWSE = 
+ETAGS = 
+EXEEXT = 
+GREP = /bin/grep
+INSTALL_DATA = ${INSTALL} -m 644
+INSTALL_HEADER = $(INSTALL_DATA)
+INSTALL = /usr/bin/install -c
+INSTALL_PROGRAM = ${INSTALL}
+INSTALL_SCRIPT = ${INSTALL}
+install_sh_DATA = $(install_sh) -c -m 644
+install_sh_PROGRAM = $(install_sh) -c
+install_sh_SCRIPT = $(install_sh) -c
+LD = ld
+MOC = 
+OBJEXT = o
+PANDOC = 
+PATH_SEPARATOR = :
+RANLIB = ranlib
+RCC = 
+STRIP = strip
+UIC = 
+WINDRES = 
+
+# Variable stuff as set by configure
+BOOST_CPPFLAGS = -I/usr/include
+BOOST_DATE_TIME_LIB = -lboost_date_time
+BOOST_FILESYSTEM_LIB = -lboost_filesystem
+BOOST_LDFLAGS = -L/usr/lib/i386-linux-gnu
+BOOST_REGEX_LIB = -lboost_regex
+BOOST_SYSTEM_LIB = -lboost_system
+CURL_CFLAGS =  
+CURL_LIBS = -lcurl  
+DEBUG_CFLAGS = 
+DOCBOOK_MANPAGES_STYLESHEET = 
+DOCBOOK_ROOT = 
+EBML_CFLAGS = -Ilib/libebml
+EBML_LDFLAGS = -Llib/libebml/src
+EBML_MATROSKA_INTERNAL = yes
+EGREP = /bin/grep -E
+EXTRA_CFLAGS = 
+EXTRA_LDFLAGS = 
+GTEST_TYPE = no
+LDFLAGS_RPATHS = 
+FLAC_LIBS = -lFLAC -logg -lm 
+ICONV_LIBS = 
+LIBINTL_LIBS = 
+MAGIC_LIBS = -lmagic -lz  
+MATROSKA_CFLAGS = -Ilib/libmatroska
+MATROSKA_LDFLAGS = -Llib/libmatroska/src
+MINGW_GUIAPP = 
+MINGW_LIBS = 
+MINGW_PROCESSOR_ARCH = 
+MINGW = 
+OGG_LIBS = -logg
+STATIC_LIBS=
+OPTIMIZATION_CFLAGS = -O3
+PO4A = 
+PO4A_TRANSLATE = 
+PO4A_FLAGS = -M utf-8 -k 0
+PO4A_TRANSLATE_FLAGS = -M utf-8 -k 0 -f docbook
+PO4A_WORKS = 
+PROFILING_CFLAGS = 
+PROFILING_LIBS = 
+QT_CFLAGS = 
+QT_LIBS = 
+QT_PLUGINS_DIR = 
+QUNUSED_ARGUMENTS = 
+STD_CXX11 = -std=c++11
+USE_CLANG = 
+USE_PRECOMPILED_HEADERS = yes
+USER_CPPFLAGS = 
+USER_CXXFLAGS = 
+USER_CFLAGS = 
+USER_LDFLAGS = 
+VORBIS_LIBS = -lvorbis -lm
+WLOGICAL_OP = -Wlogical-op
+WNO_MISMATCHED_TAGS = 
+WNO_SELF_ASSIGN = 
+WXWIDGETS_CFLAGS = -I/usr/lib/i386-linux-gnu/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D__WXGTK__ -pthread
+WXWIDGETS_INCLUDES = 
+WXWIDGETS_LIBS = -L/usr/lib/i386-linux-gnu -pthread -Wl,-Bsymbolic-functions -Wl,-z,relro  -L/usr/lib/i386-linux-gnu   -lwx_gtk2u_richtext-2.8 -lwx_gtk2u_aui-2.8 -lwx_gtk2u_xrc-2.8 -lwx_gtk2u_qa-2.8 -lwx_gtk2u_html-2.8 -lwx_gtk2u_adv-2.8 -lwx_gtk2u_core-2.8 -lwx_baseu_xml-2.8 -lwx_baseu_net-2.8 -lwx_baseu-2.8 
+XSLTPROC = 
+XSLTPROC_FLAGS = --nonet
+XSLTPROC_WORKS = 
+ZLIB_LIBS = -lz  
+
+# Which additional stuff to compile
+USE_WXWIDGETS = yes
+USE_QT = 
+BUILD_MKVTOOLNIX_GUI = 
+
+TRANSLATIONS = cs de es eu fr it ja lt nl pl pt pt_BR ru tr uk zh_CN zh_TW
+MANPAGES_TRANSLATIONS = de ja nl uk zh_CN 
+GUIDE_TRANSLATIONS = en es eu nl zh_CN 

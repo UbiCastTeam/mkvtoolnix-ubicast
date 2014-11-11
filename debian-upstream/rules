@@ -1,0 +1,50 @@
+#!/usr/bin/make -f
+
+LDFLAGS += -Wl,-z,defs -Wl,--as-needed
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+	--enable-gui
+
+#	exit 1
+
+	./drake
+
+	mv src/mkvinfo src/mkvinfo-gui
+	mv src/mmg/mmg src/mmg/mmg-gui
+
+	./drake clean:dist
+
+	dh_auto_configure -- \
+	--disable-gui
+
+	./drake default 'translations:guides'
+
+override_dh_clean:
+	[ ! -f build-config ] || ./drake clean:dist
+
+	dh_clean src/mkvinfo-gui src/mmg/mmg-gui config.status config.log \
+	rake.d/dependecy.d/*.rb src/input/*.d config.h build-config
+
+override_dh_install:
+	./drake install 'install:translations:guides' DESTDIR=$(CURDIR)/debian/tmp docdir='$${datarootdir}/doc/mkvtoolnix-gui'
+	./drake install 'install:shared' DESTDIR=$(CURDIR)/debian/tmp docdir='$${datarootdir}/doc/mkvtoolnix-gui'
+
+	dh_install --fail-missing -Xmkvtoolnix.xml
+
+	mv debian/mkvtoolnix/usr/bin/mkvinfo debian/mkvtoolnix/usr/bin/mkvinfo-text
+	mv debian/mkvtoolnix-gui/usr/bin/mmg-gui debian/mkvtoolnix-gui/usr/bin/mmg
+
+	dh_link -pmkvtoolnix usr/share/man/man1/mkvinfo.1.gz usr/share/man/man1/mkvinfo-text.1.gz
+	dh_link -pmkvtoolnix-gui usr/share/man/man1/mkvinfo.1.gz usr/share/man/man1/mkvinfo-gui.1.gz
+
+override_dh_installchangelogs:
+	dh_installchangelogs ChangeLog
+
+override_dh_builddeb:
+	dh_builddeb -- -Zxz -z9
+
+override_dh_auto_build:

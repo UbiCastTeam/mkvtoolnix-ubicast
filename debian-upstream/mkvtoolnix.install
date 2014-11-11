@@ -1,0 +1,12 @@
+usr/bin/mkvmerge
+usr/bin/mkvcut
+usr/bin/mkvinfo
+usr/bin/mkvextract
+usr/bin/mkvpropedit
+usr/share/man
+usr/share/locale
+usr/share/icons/hicolor/*/apps/mkvpropedit.png
+usr/share/icons/hicolor/*/apps/mkvextract.png
+usr/share/icons/hicolor/*/apps/mkvinfo.png
+usr/share/icons/hicolor/*/apps/mkvmerge.png
+usr/share/icons/hicolor/*/apps/mkvcut.png

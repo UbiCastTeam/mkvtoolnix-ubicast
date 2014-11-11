@@ -1,0 +1,193 @@
+/* config.h.in.  Generated from configure.in by autoheader.  */
+
+/* Define to 1 if `TIOCGWINSZ' requires <sys/ioctl.h>. */
+#undef GWINSZ_IN_SYS_IOCTL
+
+/* define if the Boost library is available */
+#undef HAVE_BOOST
+
+/* define if the Boost::Date_Time library is available */
+#undef HAVE_BOOST_DATE_TIME
+
+/* define if the Boost::Filesystem library is available */
+#undef HAVE_BOOST_FILESYSTEM
+
+/* Define to 1 if you have the <boost/lexical_cast.hpp> header file. */
+#undef HAVE_BOOST_LEXICAL_CAST_HPP
+
+/* Define to 1 if you have the <boost/logic/tribool.hpp> header file. */
+#undef HAVE_BOOST_LOGIC_TRIBOOL_HPP
+
+/* Define to 1 if you have the <boost/range.hpp> header file. */
+#undef HAVE_BOOST_RANGE_HPP
+
+/* Define to 1 if you have the <boost/rational.hpp> header file. */
+#undef HAVE_BOOST_RATIONAL_HPP
+
+/* define if the Boost::Regex library is available */
+#undef HAVE_BOOST_REGEX
+
+/* define if the Boost::System library is available */
+#undef HAVE_BOOST_SYSTEM
+
+/* Define to 1 if you have the <boost/variant.hpp> header file. */
+#undef HAVE_BOOST_VARIANT_HPP
+
+/* Define if the build timestamp should be included in the version information
+   */
+#undef HAVE_BUILD_TIMESTAMP
+
+/* define if libcurl is found via pkg-config */
+#undef HAVE_CURL_EASY_H
+
+/* Define if FLAC__stream_decoder_skip_single_frame exists */
+#undef HAVE_FLAC_DECODER_SKIP
+
+/* Define if the FLAC headers are present */
+#undef HAVE_FLAC_FORMAT_H
+
+/* Define to 1 if you have the `gettext' function. */
+#undef HAVE_GETTEXT
+
+/* Define to 1 if you have the <gtest/gtest.h> header file. */
+#undef HAVE_GTEST_GTEST_H
+
+/* Define to 1 if you have the <iconv.h> header file. */
+#undef HAVE_ICONV_H
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `gtest_main' library (-lgtest_main). */
+#undef HAVE_LIBGTEST_MAIN
+
+/* Define to 1 if you have the <libintl.h> header file. */
+#undef HAVE_LIBINTL_H
+
+/* locale_charset is available */
+#undef HAVE_LOCALE_CHARSET
+
+/* Define to 1 if you have the <magic.h> header file. */
+#undef HAVE_MAGIC_H
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* nl_langinfo is available */
+#undef HAVE_NL_LANGINFO
+
+/* int64_t does not exist */
+#undef HAVE_NO_INT64_T
+
+/* uint64_t does not exist */
+#undef HAVE_NO_UINT64_T
+
+/* Define to 1 if you have the <ogg/ogg.h> header file. */
+#undef HAVE_OGG_OGG_H
+
+/* Define if Qt is present */
+#undef HAVE_QT
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <stropts.h> header file. */
+#undef HAVE_STROPTS_H
+
+/* Define to 1 if you have the `syscall' function. */
+#undef HAVE_SYSCALL
+
+/* Define to 1 if you have the <sys/ioctl.h> header file. */
+#undef HAVE_SYS_IOCTL_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/syscall.h> header file. */
+#undef HAVE_SYS_SYSCALL_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* define if ioctl & TIOCGWINSZ are available */
+#undef HAVE_TIOCGWINSZ
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the <vorbis/codec.h> header file. */
+#undef HAVE_VORBIS_CODEC_H
+
+/* Define to 1 if you have the `vsscanf' function. */
+#undef HAVE_VSSCANF
+
+/* Define if the wxWindows class wxBitmapComboBox is present */
+#undef HAVE_WXBITMAPCOMBOBOX
+
+/* Define if the wxWindows member function wxMenuBar::SetMenuLabel is present
+   */
+#undef HAVE_WXMENUBAR_SETMENULABEL
+
+/* Define if the wxWindows member function wxMenuItem::SetItemlabel is present
+   */
+#undef HAVE_WXMENUITEM_SETITEMLABEL
+
+/* Define if wxWindows is present */
+#undef HAVE_WXWIDGETS
+
+/* Define as const if the declaration of iconv() needs const. */
+#undef ICONV_CONST
+
+/* the type to define int64_t manually */
+#undef INT64_TYPE
+
+/* Define to 1 if your C compiler doesn't accept -c and -o together. */
+#undef NO_MINUS_C_MINUS_O
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* The size of `int', as computed by sizeof. */
+#undef SIZEOF_INT
+
+/* The size of `long', as computed by sizeof. */
+#undef SIZEOF_LONG
+
+/* The size of `long long', as computed by sizeof. */
+#undef SIZEOF_LONG_LONG
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* the type to define uint64_t manually */
+#undef UINT64_TYPE
+
+/* Define if precompiled headers are generated and used */
+#undef USE_PRECOMPILED_HEADERS
+
+/* big endian system */
+#undef WORDS_BIGENDIAN

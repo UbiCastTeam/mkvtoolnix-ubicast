@@ -1,0 +1,37 @@
+#!/bin/zsh
+
+if [ "$1" = "" ]; then
+  echo 'Name?'
+  exit 1
+fi
+
+name="${${1%.rb}//-/_}"
+max_num=(test*(.On[1]))
+let next_num=${max_num[1][6,8]}+1
+
+new_file="test-${next_num}${name}.rb"
+
+cat > "$new_file" <<EOF
+#!/usr/bin/ruby -w
+
+# T_${next_num}${name}
+describe "FIXTHIS"
+
+setup do
+  # FIXTHIS
+end
+
+cleanup do
+  # FIXTHIS
+end
+
+test_merge "data/FIXTHIS"
+test_merge "data/FIXTHIS", :args => "FIXTHIS"
+
+test "data/FIXTHIS" do
+  # INSERT COMMANDS
+  hash_tmp
+end
+EOF
+
+echo "New file is $new_file"
