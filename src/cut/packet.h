@@ -216,7 +216,7 @@ struct packet_t {
     return nullptr;
   }
 
-  void normalize_timecodes();
+  void normalize_timecodes(int64_t start_point);
 };
 typedef std::shared_ptr<packet_t> packet_cptr;
 

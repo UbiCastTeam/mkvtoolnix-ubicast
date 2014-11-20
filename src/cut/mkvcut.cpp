@@ -761,6 +761,7 @@ parse_arg_split_duration(const std::string &arg) {
 static void
 parse_arg_split_timecodes(const std::string &arg) {
   std::string s = arg;
+  int count = 0;
 
   if (balg::istarts_with(s, "timecodes:"))
     s.erase(0, 10);
@@ -770,7 +771,12 @@ parse_arg_split_timecodes(const std::string &arg) {
     int64_t split_after;
     if (!parse_timecode(timecode, split_after))
       mxerror(boost::format(Y("Invalid time for '--split' in '--split %1%'. Additional error message: %2%.\n")) % arg % timecode_parser_error);
+    if (count == 0)
+        g_cluster_helper->start_point = split_after;
+    else
+        g_cluster_helper->end_point = split_after;
     g_cluster_helper->add_split_point(split_point_c(split_after, split_point_c::timecode, true));
+    count++;
   }
 }
 

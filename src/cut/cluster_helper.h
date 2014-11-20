@@ -39,12 +39,16 @@ public:
   cluster_helper_c();
   ~cluster_helper_c();
 
+  int64_t timestamp_current, delay_to_add;
+  int init_cluster;
+  int64_t start_point, end_point;
   void set_output(mm_io_c *out);
   mm_io_c *get_output();
   void prepare_new_cluster();
   KaxCluster *get_cluster();
   void add_packet(packet_cptr packet);
   int64_t get_timecode();
+  int64_t get_start();
   int render();
   int get_cluster_content_size();
   int64_t get_duration() const;
@@ -55,6 +59,7 @@ public:
   void handle_discarded_duration(bool create_new_file, bool previously_discarding);
 
   void add_split_point(split_point_c const &split_point);
+  //void add_split_point(split_point_c &split_point, split_point_c &split_point2);
   void dump_split_points() const;
   bool splitting() const;
   bool split_mode_produces_many_files() const;
@@ -72,7 +77,7 @@ private:
   void set_duration(render_groups_c *rg);
   bool must_duration_be_set(render_groups_c *rg, packet_cptr &new_packet);
 
-  void render_before_adding_if_necessary(packet_cptr &packet);
+  int render_before_adding_if_necessary(packet_cptr &packet);
   void render_after_adding_if_necessary(packet_cptr &packet);
   void split_if_necessary(packet_cptr &packet);
   void split(packet_cptr &packet);

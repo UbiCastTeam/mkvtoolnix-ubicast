@@ -128,7 +128,7 @@ cluster_helper_c::is_splitting_and_processed_fully()
   return m->splitting_and_processed_fully;
 }
 
-void
+int
 cluster_helper_c::render_before_adding_if_necessary(packet_cptr &packet) {
   int64_t timecode        = get_timecode();
   int64_t timecode_delay  = (   (packet->assigned_timecode > m->max_timecode_in_cluster)
@@ -153,19 +153,26 @@ cluster_helper_c::render_before_adding_if_necessary(packet_cptr &packet) {
                                 || ((packet->assigned_timecode - timecode) > g_max_ns_per_cluster)
                                 || is_video_keyframe));
 
-  if (is_video_keyframe)
+  if (is_video_keyframe && !init_cluster){
+    delay_to_add = timestamp_current - start_point;
+    end_point += delay_to_add;
+  }
+  if (is_video_keyframe) {
     m->first_video_keyframe_seen = true;
-
-  mxdebug_if(m->debug_rendering,
-             boost::format("render check cur_tc %9% min_tc_ic %1% prev_cl_tc %2% test %3% is_vid_and_key %4% tc_delay %5% gap_following_and_not_empty %6% cur_tc>min_tc_ic %8% first_video_key_seen %10% do_render %7%\n")
-             % m->min_timecode_in_cluster % m->previous_cluster_tc % (std::max<int64_t>(0, m->min_timecode_in_cluster) > m->previous_cluster_tc) % is_video_keyframe
-             % timecode_delay % (packet->gap_following && !m->packets.empty()) % do_render % (packet->assigned_timecode > m->min_timecode_in_cluster) % packet->assigned_timecode % m->first_video_keyframe_seen);
-
-  if (!do_render)
-    return;
-
-  render();
-  prepare_new_cluster();
+  }
+  else if (!is_video_keyframe && !init_cluster)
+    return 0;
+  else {
+      mxdebug_if(m->debug_rendering,
+                 boost::format("render check cur_tc %9% min_tc_ic %1% prev_cl_tc %2% test %3% is_vid_and_key %4% tc_delay %5% gap_following_and_not_empty %6% cur_tc>min_tc_ic %8% first_video_key_seen %10% do_render %7%\n")
+                 % m->min_timecode_in_cluster % m->previous_cluster_tc % (std::max<int64_t>(0, m->min_timecode_in_cluster) > m->previous_cluster_tc) % is_video_keyframe
+                 % timecode_delay % (packet->gap_following && !m->packets.empty()) % do_render % (packet->assigned_timecode > m->min_timecode_in_cluster) % packet->assigned_timecode % m->first_video_keyframe_seen);
+      if (!do_render)
+        return 0;
+      render();
+      prepare_new_cluster();
+  }
+  return 1;
 }
 
 void
@@ -191,7 +198,6 @@ cluster_helper_c::split_if_necessary(packet_cptr &packet) {
     return;
 
   bool split_now = false;
-
   // Maybe we want to start a new file now.
   if (split_point_c::size == m->current_split_point->m_type) {
     int64_t additional_size = 0;
@@ -222,7 +228,6 @@ cluster_helper_c::split_if_necessary(packet_cptr &packet) {
                || (split_point_c::parts_frame_field == m->current_split_point->m_type))
            && (m->frame_field_number >= m->current_split_point->m_point))
     split_now = true;
-
   if (!split_now)
     return;
 
@@ -277,13 +282,16 @@ cluster_helper_c::split(packet_cptr &packet) {
 
 void
 cluster_helper_c::add_packet(packet_cptr packet) {
+  int do_render = 0;
+
   if (!m->cluster)
     prepare_new_cluster();
-
-  packet->normalize_timecodes();
-  render_before_adding_if_necessary(packet);
-  split_if_necessary(packet);
-
+  packet->timecode = 0;
+  packet->normalize_timecodes(start_point);
+  do_render = render_before_adding_if_necessary(packet);
+  //split_if_necessary(packet);
+  if (init_cluster == 1 || do_render) {
+  init_cluster = 1;
   m->packets.push_back(packet);
   m->cluster_content_size += packet->data->get_size();
 
@@ -297,6 +305,7 @@ cluster_helper_c::add_packet(packet_cptr packet) {
 
   if (g_video_packetizer == packet->source)
     ++m->frame_field_number;
+  }
 }
 
 int64_t
@@ -407,7 +416,6 @@ cluster_helper_c::render() {
   // Splitpoint stuff
   if ((-1 == m->header_overhead) && splitting())
     m->header_overhead = m->out->getFilePointer() + g_tags_size;
-
   // Make sure that we don't have negative/wrapped around timecodes in the output file.
   // Can happend when we're splitting; so adjust timecode_offset accordingly.
   m->timecode_offset       = boost::accumulate(m->packets, m->timecode_offset, [](int64_t a, const packet_cptr &p) { return std::min(a, p->assigned_timecode); });
@@ -476,6 +484,7 @@ cluster_helper_c::render() {
       added_to_cues = false;
     }
 
+    // TODO AJUSTEMENT DU DELAY AUDIO/VIDEO
     // Now put the packet into the cluster.
     render_group->m_more_data = new_block_group->add_frame_auto(track_entry, pack->assigned_timecode - timecode_offset, *data_buffer, lacing_type,
                                                                 pack->has_bref() ? pack->bref - timecode_offset : -1,

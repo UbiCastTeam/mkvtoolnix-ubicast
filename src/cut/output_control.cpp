@@ -570,7 +570,8 @@ display_progress(bool is_100percent = false) {
     s_display_reader = determine_display_reader();
 
   bool display_progress  = false;
-  int current_percentage = (s_display_reader->get_progress() + s_display_files_done * 100) / s_display_path_length;
+  //int current_percentage = (s_display_reader->get_progress() + s_display_files_done * 100) / s_display_path_length;
+  int current_percentage = g_cluster_helper->timestamp_current * 100 / g_cluster_helper->end_point;
   int64_t current_time   = get_current_time_millis();
 
   if (   (-1 == s_previous_percentage)
@@ -2189,7 +2190,7 @@ pull_packetizers_for_packets() {
   for (auto &ptzr : g_packetizers) {
     if (FILE_STATUS_HOLDING == ptzr.status)
       ptzr.status = FILE_STATUS_MOREDATA;
-
+    //g_cluster_helper->timestamp_current = ptzr.pack->assigned_timecode;
     ptzr.old_status = ptzr.status;
 
     while (   !ptzr.pack
@@ -2234,6 +2235,7 @@ select_winning_packetizer() {
     if (!ptzr.pack)
       continue;
 
+    g_cluster_helper->timestamp_current = ptzr.pack->assigned_timecode;
     if (!winner || !winner->pack)
       winner = &ptzr;
 
@@ -2260,6 +2262,7 @@ discard_queued_packets() {
 */
 void
 main_loop() {
+  g_cluster_helper->init_cluster = 0;
   // Let's go!
   while (1) {
     // Step 1: Make sure a packet is available for each output
@@ -2278,16 +2281,18 @@ main_loop() {
 
       // Step 3: Add the winning packet to a cluster. Full clusters will be
       // rendered automatically.
-      g_cluster_helper->add_packet(pack);
+      if (g_cluster_helper->timestamp_current >= g_cluster_helper->start_point && g_cluster_helper->timestamp_current <= g_cluster_helper->end_point)
+        g_cluster_helper->add_packet(pack);
 
       winner->pack.reset();
 
       // If splitting by parts is active and the last part has been
       // processed fully then we can finish up.
+      /*
       if (g_cluster_helper->is_splitting_and_processed_fully()) {
         discard_queued_packets();
         break;
-      }
+      }*/
 
       // display some progress information
       if (1 <= verbose)
@@ -2295,11 +2300,15 @@ main_loop() {
 
     } else if (!appended_a_track) // exit if there are no more packets
       break;
+      if (g_cluster_helper->timestamp_current >= g_cluster_helper->end_point)
+        break;
   }
 
   // Render all remaining packets (if there are any).
-  if (g_cluster_helper && (0 < g_cluster_helper->get_packet_count()))
+  if (g_cluster_helper && (0 < g_cluster_helper->get_packet_count())) {
     g_cluster_helper->render();
+    discard_queued_packets();
+  }
 
   if (1 <= verbose)
     display_progress(true);
@@ -2326,10 +2335,8 @@ void
 cleanup() {
   delete g_cluster_helper;
   g_cluster_helper = nullptr;
-
   destroy_readers();
   g_attachments.clear();
-
   delete s_kax_tags;
   s_kax_tags = nullptr;
 

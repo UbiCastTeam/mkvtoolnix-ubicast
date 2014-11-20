@@ -252,6 +252,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
 }
 
 generic_packetizer_c::~generic_packetizer_c() {
+  m_packet_queue.clear();
   if (!m_packet_queue.empty())
     mxerror_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n")) % m_has_been_flushed % BUGMSG);
 }
