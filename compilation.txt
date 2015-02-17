@@ -1,0 +1,42 @@
+Compilation static:
+
+apt-get install rake, autoconf, autogen, libmagic-dev
+
+boost:
+./bootstrap.sh --prefix="~/dependances/installed"
+sudo ./b2 install
+
+curl + autres:
+./configure --enable-shared --enable-static --prefix="~/dependances/installed"
+
+
+LIBEBML_INCLUDE_DIR=$(CWD)/../../../libebml
+LIBEBML_LIB_DIR=$(CWD)/../../../libebml/make/linux
+
+
+make staticlib
+libebml et libmatroiska
+make staticlib prefix=~/dependance/installed/
+make install
+
+dependance libogg, libvorbis, libebml, 
+
+
+*** git submodule init
+*** git submodule update
+
+
+./configure --with-extra-includes="~/dependance/installed/include/" --with-extra-libs="~/dependance/installed/lib/"
+
+./configure --with-extra-includes="~/dependance/installed/include/" --with-extra-libs="~/dependance/installed/lib/" --without-flac ZLIB_CFLAGS=~/dependance/installed/include ZLIB_LIBS=~/dependance/installed/lib/
+
+
+LIBEBML_INCLUDE_DIR=$(CWD)/../../../libebml
+LIBEBML_LIB_DIR=$(CWD)/../../../libebml/make/linux
+
+
+./b2 link=static
+./b2 install --prefix="~/dependance/installed"
+
+./configure --without-flac --without-curl ZLIB_CFLAGS="~/dependances" ZLIB_LIBS="~/dependances" --with-boost="~/dependances" --enable-static --enable-gui=no --enable-qt=no --enable-wxwidgets=no
+
