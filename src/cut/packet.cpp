@@ -21,7 +21,7 @@
 void
 packet_t::normalize_timecodes(int64_t start_point) {
   // Normalize the timecodes according to the timecode scale.
-  unmodified_assigned_timecode = assigned_timecode - start_point;
+  unmodified_assigned_timecode = assigned_timecode;
   unmodified_duration          = duration;
   timecode                     = RND_TIMECODE_SCALE(timecode) - start_point;
   assigned_timecode            = RND_TIMECODE_SCALE(assigned_timecode) - start_point;

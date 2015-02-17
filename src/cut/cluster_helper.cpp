@@ -154,8 +154,9 @@ cluster_helper_c::render_before_adding_if_necessary(packet_cptr &packet) {
                                 || is_video_keyframe));
 
   if (is_video_keyframe && !init_cluster){
-    delay_to_add = timestamp_current - start_point;
+    delay_to_add = packet->unmodified_assigned_timecode - start_point;
     end_point += delay_to_add;
+    start_point += delay_to_add;
   }
   if (is_video_keyframe) {
     m->first_video_keyframe_seen = true;
